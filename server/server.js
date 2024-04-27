@@ -1,6 +1,6 @@
-const connect_to_database = require('./lib/connectDB')
 const app = require('./app')
 const PORT = process.env.PORT 
+const connect_to_database = require('./lib/connectDB')
 
 if (process.env.NODE_ENV !== "PRODUCTION") {
     require("dotenv").config({
