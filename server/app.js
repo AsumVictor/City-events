@@ -2,6 +2,7 @@ const express  = require("express");
 const app = express();
 const cors = require("cors");
 const place_routes = require('./controller/api_controller')
+const handleError = require("./middleware/error");
 
 if (process.env.NODE_ENV !== "PRODUCTION") {
     require("dotenv").config({
@@ -25,4 +26,5 @@ app.use(express.static("images"))
 
 app.use('/api', place_routes)
 
+app.use(handleError)
 module.exports = app;
