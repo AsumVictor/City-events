@@ -90,13 +90,18 @@ Router.patch(
 
       res.json({ success: true, message: "Changes Saved!", place });
     } catch (error) {
-        return next(new ErrorHandler(error, 400));
+      return next(new ErrorHandler(error, 400));
     }
   })
 );
 
-Router.delete("/", async (req, res, next) => {
-  res.json({ message: "delete a specfic place" });
+Router.delete("/:id", async (req, res, next) => {
+  try {
+    await Model.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: "Place deleted succesfuly" });
+  } catch (error) {
+    return next(new ErrorHandler(error, 400));
+  }
 });
 
 module.exports = Router;
