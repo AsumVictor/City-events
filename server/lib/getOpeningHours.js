@@ -12,9 +12,10 @@ const days = {
 function isOpen(openHours) {
   const date = new Date();
   const currentDay = days[date.getDay()];
-
-  const openTime = addTime(openHours.get(currentDay)[0]);
-  const closeTime = addTime(openHours.get(currentDay)[1]);
+  let today = openHours.get(currentDay)
+  if (!today) return false;
+  const openTime = addTime(today[0]);
+  const closeTime = addTime(today[1]);
 
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");

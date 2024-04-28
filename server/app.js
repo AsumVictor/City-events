@@ -1,8 +1,10 @@
 const express  = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
 const place_routes = require('./controller/api_controller')
 const handleError = require("./middleware/error");
+const bodyParser = require("body-parser");
 
 if (process.env.NODE_ENV !== "PRODUCTION") {
     require("dotenv").config({
@@ -14,8 +16,10 @@ app.use(cors({
     origin: "*",
 }))
 
-app.use(express.json())
-app.use(express.static("images"))
+app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, "public")))
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // All Routes endpoints
 // - add new place
