@@ -46,9 +46,27 @@ Router.get(
 );
 
 Router.get(
-  "/:id",
+  "/:name",
   CatchAsynError(async (req, res, next) => {
-    res.json({ message: "Get specfic place" });
+    let name = req.params.name;
+    let place = await Model.findOne({
+      name: name,
+    });
+
+    if (!place) {
+      return next(new ErrorHandler("Invalid place name", 404));
+    }
+
+    place = {
+        name: place.name,
+        location: place.location,
+        images: place.images,
+        description: place.description,
+        open_hours: place.open_hours,
+        is_open: isOpen(place.open_hours),
+      }
+    
+    res.json({ success: true, data: place });
   })
 );
 
