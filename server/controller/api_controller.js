@@ -28,6 +28,7 @@ Router.get(
 
       places = places.map((place) => {
         return {
+          _id: place.id,
           name: place.name,
           location: place.location,
           images: place.images,
@@ -58,22 +59,39 @@ Router.get(
     }
 
     place = {
-        name: place.name,
-        location: place.location,
-        images: place.images,
-        description: place.description,
-        open_hours: place.open_hours,
-        is_open: isOpen(place.open_hours),
-      }
-    
+      _id: place.id,
+      name: place.name,
+      location: place.location,
+      images: place.images,
+      description: place.description,
+      open_hours: place.open_hours,
+      is_open: isOpen(place.open_hours),
+    };
+
     res.json({ success: true, data: place });
   })
 );
 
 Router.patch(
-  "/",
+  "/:id",
   CatchAsynError(async (req, res, next) => {
-    res.json({ message: "Update a specfic place" });
+    try {
+      const { data, field } = req.body;
+
+      if (!(data && field && req.params.id)) {
+        return next(new ErrorHandler("Error occured! try Again", 400));
+      }
+
+      let place = await Model.findOneAndUpdate(
+        { _id: req.params.id },
+        { [field]: data },
+        { new: true }
+      );
+
+      res.json({ success: true, message: "Changes Saved!", place });
+    } catch (error) {
+        return next(new ErrorHandler(error, 400));
+    }
   })
 );
 
