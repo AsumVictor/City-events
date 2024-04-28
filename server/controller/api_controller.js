@@ -4,12 +4,25 @@ const Model = require("../model/api-model");
 const CatchAsynError = require("../middleware/catchAsyncError");
 const ErrorHandler = require("../lib/ErrorHandler");
 const isOpen = require("../lib/getOpeningHours");
+const uploads = require("../lib/multer");
 
 Router.post(
   "/",
+  uploads.array("images"),
   CatchAsynError(async (req, res, next) => {
     try {
-      await Model.create(req.body);
+      let images = req.files.map((f) => {
+        return f.filename;
+      });
+
+      let place = {
+        name: req.body.name,
+        description: req.body.description,
+        location: req.body.location,
+        open_hours: {'': ['']},
+        images: images,
+      };
+      await Model.create(place);
       res.json({
         success: true,
         message: "You have successfully added a place!",
