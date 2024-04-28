@@ -7,12 +7,13 @@ const placesSchema = mongoose.Schema({
     unique: true,
     validate: {
       validator: async function (value) {
-        const existing_place = await this.findOne({
-          name: { $regex: new RegExp(`^${value}$`, "i") },
+        const existing_place = await this.constructor.findOne({
+          name: { $regex: new RegExp(`^${value.trim()}$`, 'i') },
         });
 
         return !existing_place
       },
+      message: 'Place with this name already exists'
     },
   },
   description: {
