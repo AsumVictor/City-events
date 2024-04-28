@@ -16,10 +16,12 @@ const placesSchema = mongoose.Schema({
   open_hours: {
     type: Map,
     of: [String],
+    required: [true, "Please speficy opening times"],
   },
   images: [
     {
       type: String,
+      require: ["true", "Upload at least one image"],
     },
   ],
 });
