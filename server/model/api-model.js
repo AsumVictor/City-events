@@ -4,6 +4,16 @@ const placesSchema = mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please fill the name field"],
+    unique: true,
+    validate: {
+      validator: async function (value) {
+        const existing_place = await this.findOne({
+          name: { $regex: new RegExp(`^${value}$`, "i") },
+        });
+
+        return !existing_place
+      },
+    },
   },
   description: {
     type: String,
@@ -34,5 +44,5 @@ const placesSchema = mongoose.Schema({
 // - **Open Hours**
 // - Images (Handle file uploads for images)
 
-const places = mongoose.model("places", placesSchema)
-module.exports = places
+const places = mongoose.model("places", placesSchema);
+module.exports = places;
